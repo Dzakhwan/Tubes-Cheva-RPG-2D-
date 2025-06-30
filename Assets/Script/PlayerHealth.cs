@@ -1,13 +1,37 @@
 using UnityEngine;
+using UnityEngine.UI; // Tambahkan ini
 
 public class PlayerHealth : MonoBehaviour
 {
-    public int maxHealth;
-    public int currentHealth;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private int maxHealth = 5  ;
+    private int currentHealth;
+    public Slider healthSlider; // Tambahkan ini
+
+    void Start()
+    {
+        currentHealth = maxHealth;
+
+        // Pastikan slider di-set pada awal
+        if (healthSlider != null)
+        {
+            healthSlider.maxValue = maxHealth;
+            healthSlider.value = currentHealth;
+        }
+    }
+
     public void changeHealth(int amount)
     {
         currentHealth += amount;
+
+        // Batas atas dan bawah
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+        // Update slider
+        if (healthSlider != null)
+        {
+            healthSlider.value = currentHealth;
+        }
+
         if (currentHealth <= 0)
         {
             Destroy(gameObject);
