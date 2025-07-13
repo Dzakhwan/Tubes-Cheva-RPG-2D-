@@ -1,3 +1,5 @@
+
+using System.Collections;
 using UnityEngine;
 
 public class EnemyFSM : MonoBehaviour
@@ -6,10 +8,23 @@ public class EnemyFSM : MonoBehaviour
     private State currentState;
 
     public Rigidbody2D rb;
-    public Transform player;
+    public Transform player, detectionPoint;
+    public Animator anim;
+    public float playerDetectionRange = 5f;
+    public LayerMask playerLayer;
     public float speed = 2f;
     public float attackRange = 2;
-    public Animator anim;
+    private float attackTimer = 0;
+    public float attackCooldown = 2f;
+
+    [Header("Attack Animations")]
+    public string attack_up = "attack_up";
+    public string attack_down = "attack_down";
+    public string attack_left = "attack_left";
+    public string attack_right = "attack_right";
+
+    // Add reference to EnemeyCombat component
+    private EnemeyCombat enemyCombat;
 
     void Start()
     {
@@ -18,21 +33,53 @@ public class EnemyFSM : MonoBehaviour
         {
             anim.SetBool("isIdle", true);
         }
+
+        // Get EnemeyCombat component
+        enemyCombat = GetComponent<EnemeyCombat>();
+        if (enemyCombat == null)
+        {
+            Debug.LogWarning("EnemeyCombat component not found on " + gameObject.name);
+        }
+
+        // Auto-find player if not assigned
+        if (player == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+            {
+                player = playerObj.transform;
+                Debug.Log("Player found and assigned automatically");
+            }
+            else
+            {
+                Debug.LogError("Player not found! Make sure Player has 'Player' tag");
+            }
+        }
     }
 
     void Update()
     {
+        CheckForPlayer();
+        if (attackTimer > 0)
+        {
+            attackTimer -= Time.deltaTime;
+        }
         // Execute behavior based on current state
         switch (currentState)
         {
             case State.Idle:
                 // Do nothing, just idle
+                rb.linearVelocity = Vector2.zero;
                 break;
             case State.Chase:
                 ChasePlayer();
                 break;
             case State.Attack:
                 rb.linearVelocity = Vector2.zero;
+                if (Vector2.Distance(transform.position, player.position) > attackRange)
+                {
+                    ChangeState(State.Chase);
+                }
                 break;
         }
     }
@@ -40,41 +87,67 @@ public class EnemyFSM : MonoBehaviour
     void ChasePlayer()
     {
         if (player == null || rb == null) return;
-        if (Vector2.Distance(transform.position, player.transform.position) < attackRange)
-        {
-            ChangeState(State.Attack);
 
-        }
         // Calculate direction to player
         Vector2 direction = (player.position - transform.position).normalized;
 
         // Move towards player
         rb.linearVelocity = direction * speed;
 
-        // Flip sprite to face player
-        FlipToPlayer();
+        // Face player direction (for top-down)
+        FacePlayerDirection();
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void CheckForPlayer()
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (detectionPoint == null)
         {
-            if (player == null) player = collision.transform;
-            ChangeState(State.Chase);
+            Debug.LogError("DetectionPoint is not assigned!");
+            return;
         }
-    }
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
+        Collider2D[] hits = Physics2D.OverlapCircleAll(detectionPoint.position, playerDetectionRange, playerLayer);
+        if (hits.Length > 0)
         {
-            rb.linearVelocity = Vector2.zero;
+            player = hits[0].transform;
+            float distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
+
+            Debug.Log("Player detected! Distance: " + distanceToPlayer + ", Current State: " + currentState);
+
+            // Jangan ubah state jika sedang dalam Attack dan masih cooldown
+            if (currentState == State.Attack && attackTimer > 0)
+            {
+                return; // Tetap dalam state Attack
+            }
+
+            // Cek attack range
+            if (distanceToPlayer <= attackRange && attackTimer <= 0)
+            {
+                attackTimer = attackCooldown;
+                ChangeState(State.Attack);
+            }
+            // Jika di luar attack range, chase
+            else if (distanceToPlayer > attackRange)
+            {
+                ChangeState(State.Chase);
+            }
+            // Jika dalam attack range tapi masih cooldown dan BUKAN sedang attack
+            else if (distanceToPlayer <= attackRange && attackTimer > 0 && currentState != State.Attack)
+            {
+                rb.linearVelocity = Vector2.zero;
+                ChangeState(State.Idle);
+            }
+        }
+        else
+        {
             ChangeState(State.Idle);
         }
     }
 
     void ChangeState(State newState)
     {
+        Debug.Log("Changing state from " + currentState + " to " + newState);
+
         // Exit current state
         if (currentState == State.Idle)
         {
@@ -87,6 +160,10 @@ public class EnemyFSM : MonoBehaviour
         else if (currentState == State.Attack)
         {
             if (anim != null) anim.SetBool("isAttacking", false);
+            if (anim != null) anim.SetBool(attack_up, false);
+            if (anim != null) anim.SetBool(attack_down, false);
+            if (anim != null) anim.SetBool(attack_left, false);
+            if (anim != null) anim.SetBool(attack_right, false);
         }
 
         // Change to new state
@@ -103,20 +180,97 @@ public class EnemyFSM : MonoBehaviour
         }
         else if (currentState == State.Attack)
         {
-            if (anim != null) anim.SetBool("isAttacking", true);
+
+
+            Debug.Log("Triggering directional attack");
+            TriggerDirectionalAttack();
+
         }
     }
 
-    void FlipToPlayer()
+    void FacePlayerDirection()
     {
         if (player == null) return;
 
+        // Calculate direction to player for top-down movement
+        Vector2 direction = (player.position - transform.position).normalized;
+
+        // Optional: Rotate enemy to face player (uncomment if you want rotation)
+        // float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        // transform.rotation = Quaternion.AngleAxis(angle - 90f, Vector3.forward);
+
+        // Or keep the flip system for horizontal movement only
         Vector3 scale = transform.localScale;
         scale.x = player.position.x > transform.position.x ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
         transform.localScale = scale;
     }
-    void Attack()
+
+   void TriggerDirectionalAttack()
+{
+    if (player == null || anim == null) return;
+
+    Vector2 directionToPlayer = (player.position - transform.position).normalized;
+
+    // Reset semua terlebih dulu (hindari tumpang tindih)
+    anim.SetBool(attack_up, false);
+    anim.SetBool(attack_down, false);
+    anim.SetBool(attack_left, false);
+    anim.SetBool(attack_right, false);
+    anim.SetBool("isAttacking", false);
+
+    if (Mathf.Abs(directionToPlayer.y) > Mathf.Abs(directionToPlayer.x))
     {
-        Debug.Log("Attack");
+        if (directionToPlayer.y > 0)
+        {
+            anim.SetBool(attack_up, true);
+            Debug.Log("Enemy attacking UP");
+        }
+        else
+        {
+            anim.SetBool(attack_down, true);
+            Debug.Log("Enemy attacking DOWN");
+        }
     }
+    else
+    {
+        if (directionToPlayer.x > 0)
+        {
+            anim.SetBool("isAttacking", true); // kanan
+            Debug.Log("Enemy attacking RIGHT");
+        }
+        else 
+        {
+            anim.SetBool("isAttacking", true); // kiri
+            Debug.Log("Enemy attacking LEFT");
+        }
+    }
+
+    // Panggil reset agar tidak stuck
+    StartCoroutine(ResetAttackBools(0.5f)); // Sesuaikan durasi dengan panjang animasi
+}
+
+
+
+
+    // Untuk debugging - bisa dihapus nanti
+    void OnDrawGizmosSelected()
+    {
+        if (detectionPoint != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(detectionPoint.position, playerDetectionRange);
+        }
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+    IEnumerator ResetAttackBools(float delay)
+{
+    yield return new WaitForSeconds(delay); // tunggu animasi selesai
+    anim.SetBool(attack_up, false);
+    anim.SetBool(attack_down, false);
+    anim.SetBool(attack_left, false);
+    anim.SetBool(attack_right, false);
+    anim.SetBool("isAttacking", false);
+}
 }

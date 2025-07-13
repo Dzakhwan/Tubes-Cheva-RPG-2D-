@@ -29,19 +29,23 @@ public class PlayerMovement : MonoBehaviour
             Flip();
         }
         if (Input.GetKey(KeyCode.LeftShift))
-            {
-                speed = 6; // kecepatan berlari
-            }
-            else
-            {
-                speed = 3; // kecepatan jalan
-            }
+        {
+            speed = 6; // kecepatan berlari
+        }
+        else
+        {
+            speed = 3; // kecepatan jalan
+        }
         rb.linearVelocity = new Vector2(horizontal * speed, vertical * speed);
     }
     void Flip()
     {
         facingDirection *= -1;
         transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
+    }
+    void StaminaBar()
+    {
+        
     }
     
 }
