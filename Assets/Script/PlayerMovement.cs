@@ -1,4 +1,4 @@
-using System;
+    using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -30,6 +30,8 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.LeftShift))
         {
+            anim.SetTrigger("run");
+            
             speed = 6; // kecepatan berlari
         }
         else
