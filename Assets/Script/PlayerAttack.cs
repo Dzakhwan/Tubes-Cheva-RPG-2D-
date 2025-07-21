@@ -8,6 +8,7 @@ public class PlayerAttack : MonoBehaviour
     public LayerMask enemyLayer;
     public float attackRange = 1.5f;
     public int damageAmount = 3;
+    public float knockbackForce = 10f;
 
     public float slashDuration = 0.5f;
 
@@ -78,34 +79,25 @@ public class PlayerAttack : MonoBehaviour
         
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(selectedAttackPoint.position, attackRange, enemyLayer);
         Debug.Log("Found " + hitEnemies.Length + " enemies in range");
-        
+
         foreach (Collider2D enemy in hitEnemies)
         {
             Debug.Log("Hit enemy: " + enemy.name);
-            
+
             EnemyHealth health = enemy.GetComponent<EnemyHealth>();
-            if (health != null)
+            EnemyKnockback enemyKnockback = enemy.GetComponent<EnemyKnockback>();
+            if (health != null && enemyKnockback != null)
             {
-                Debug.Log("Dealing damage to: " + enemy.name);
+                Debug.Log("Dealing damage to: " );
                 health.ChangeHealth(-damageAmount);
-                
-                // Gunakan HitEffect system untuk knockback dan flash
-                HitEffect hitEffect = enemy.GetComponent<HitEffect>();
-                if (hitEffect != null)
-                {
-                    Debug.Log("Triggering hit effect on: " + enemy.name);
-                    Vector2 knockbackDirection = (enemy.transform.position - transform.position).normalized;
-                    hitEffect.TriggerHitEffect(knockbackDirection);
-                }
-                else
-                {
-                    Debug.LogError("No HitEffect component found on: " + enemy.name);
-                }
+                enemyKnockback.knockback(transform, knockbackForce);
+
+
             }
-            else
-            {
-                Debug.LogError("No EnemyHealth component found on: " + enemy.name);
-            }
+            
+            
+           
+            
         }
     }
 

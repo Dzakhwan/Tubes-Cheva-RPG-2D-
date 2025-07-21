@@ -124,7 +124,7 @@ public class EnemyFSM : MonoBehaviour
                 ChangeState(State.Attack);
             }
             // Jika di luar attack range, chase
-            else if (distanceToPlayer > attackRange)
+            else if (distanceToPlayer > attackRange && currentState != State.Attack)
             {
                 ChangeState(State.Chase);
             }

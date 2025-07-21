@@ -310,6 +310,7 @@ GameObject:
   - component: {fileID: 55631781}
   - component: {fileID: 55631782}
   - component: {fileID: 55631783}
+  - component: {fileID: 55631784}
   m_Layer: 6
   m_Name: Skeleton
   m_TagString: Untagged
@@ -470,6 +471,8 @@ MonoBehaviour:
   anim: {fileID: 55631779}
   AttackPoint: {fileID: 1097961825}
   weaponRange: 2.5
+  StunTime: 0.5
+  knockbackForce: 5
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -517,7 +520,7 @@ MonoBehaviour:
     m_Bits: 8
   speed: 3
   attackRange: 2
-  attackCooldown: 2
+  attackCooldown: 1
   attack_up: attack_up
   attack_down: attack_down
   attack_left: attack
@@ -583,10 +586,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 041e443472f61a2488aa00daff995d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashColor:
+    r: 1
+    g: 1
+    b: 1
+    a: 1
   flashDuration: 0.1
   knockbackForce: 5
   knockbackDuration: 0.2
+  spriteRenderer: {fileID: 0}
+  originalColor:
+    r: 0
+    g: 0
+    b: 0
+    a: 0
+  rb: {fileID: 0}
+  isKnockedBack: 0
+--- !u!114 &55631784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 55631772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ad4eccbedef0ac42b98ea1278545d5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &106782332
 GameObject:
   m_ObjectHideFlags: 0
@@ -35939,10 +35966,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 041e443472f61a2488aa00daff995d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashColor:
+    r: 1
+    g: 1
+    b: 1
+    a: 1
   flashDuration: 0.1
   knockbackForce: 5
   knockbackDuration: 0.2
+  spriteRenderer: {fileID: 0}
+  originalColor:
+    r: 0
+    g: 0
+    b: 0
+    a: 0
+  rb: {fileID: 0}
+  isKnockedBack: 0
 --- !u!1 &1825331174
 GameObject:
   m_ObjectHideFlags: 0
