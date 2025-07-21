@@ -50,10 +50,7 @@ public class EnemyFSM : MonoBehaviour
                 player = playerObj.transform;
                 Debug.Log("Player found and assigned automatically");
             }
-            else
-            {
-                Debug.LogError("Player not found! Make sure Player has 'Player' tag");
-            }
+           
         }
     }
 
@@ -212,10 +209,7 @@ public class EnemyFSM : MonoBehaviour
     Vector2 directionToPlayer = (player.position - transform.position).normalized;
 
     // Reset semua terlebih dulu (hindari tumpang tindih)
-    anim.SetBool(attack_up, false);
-    anim.SetBool(attack_down, false);
-    anim.SetBool(attack_left, false);
-    anim.SetBool(attack_right, false);
+    
     anim.SetBool("isAttacking", false);
 
     if (Mathf.Abs(directionToPlayer.y) > Mathf.Abs(directionToPlayer.x))
@@ -267,10 +261,7 @@ public class EnemyFSM : MonoBehaviour
     IEnumerator ResetAttackBools(float delay)
 {
     yield return new WaitForSeconds(delay); // tunggu animasi selesai
-    anim.SetBool(attack_up, false);
-    anim.SetBool(attack_down, false);
-    anim.SetBool(attack_left, false);
-    anim.SetBool(attack_right, false);
+    
     anim.SetBool("isAttacking", false);
 }
 }

@@ -34,6 +34,13 @@ public class EnemeyCombat : MonoBehaviour
         {
             playerHealth.changeHealth(-damage);
             Debug.Log("We hit " + hitEnemies[0].name);
+            // Add hit effect and knockback
+                HitEffect hitEffect = hitEnemies[0].gameObject.GetComponent<HitEffect>();
+                if (hitEffect != null)
+                {
+                    Vector2 knockbackDirection = (hitEnemies[0].transform.position - transform.position).normalized;
+                    hitEffect.TriggerHitEffect(knockbackDirection);
+                }
         }
         else
         {
