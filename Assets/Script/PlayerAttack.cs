@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class PlayerAttack : MonoBehaviour
 {
     public GameObject slashEffect;                   // Prefab slash effect
@@ -8,6 +7,8 @@ public class PlayerAttack : MonoBehaviour
     public LayerMask enemyLayer;
     public float attackRange = 1.5f;
     public int damageAmount = 3;
+    public float stunTime = 0.5f;
+    public float knockbackTime = 0.2f;
     public float knockbackForce = 10f;
 
     public float slashDuration = 0.5f;
@@ -22,6 +23,7 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
+        
         Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         if (moveInput != Vector2.zero)
         {
@@ -76,33 +78,39 @@ public class PlayerAttack : MonoBehaviour
 
         // Serang musuh di area
         Debug.Log("Attacking at position: " + selectedAttackPoint.position + " with range: " + attackRange);
-        
+
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(selectedAttackPoint.position, attackRange, enemyLayer);
         Debug.Log("Found " + hitEnemies.Length + " enemies in range");
-
-        foreach (Collider2D enemy in hitEnemies)
+        if (hitEnemies.Length > 0)
         {
-            Debug.Log("Hit enemy: " + enemy.name);
-
-            EnemyHealth health = enemy.GetComponent<EnemyHealth>();
-            EnemyKnockback enemyKnockback = enemy.GetComponent<EnemyKnockback>();
-            if (health != null && enemyKnockback != null)
-            {
-                Debug.Log("Dealing damage to: " );
-                health.ChangeHealth(-damageAmount);
-                enemyKnockback.knockback(transform, knockbackForce);
-
-
-            }
-            
-            
-           
-            
+            hitEnemies[0].GetComponent<EnemyHealth>().ChangeHealth(-damageAmount);
+            hitEnemies[0].GetComponent<EnemyKnockback>().knockback(transform, knockbackForce, stunTime, knockbackTime);
         }
+
+        // foreach (Collider2D enemy in hitEnemies)
+        // {
+        //     Debug.Log("Hit enemy: " + enemy.name);
+
+            //     EnemyHealth health = enemy.GetComponent<EnemyHealth>();
+
+            //     if (health != null)
+            //     {
+            //         Debug.Log("Dealing damage to: ");
+            //         health.ChangeHealth(-damageAmount);
+            //     }
+            //     EnemyKnockback knockback = enemy.GetComponent<EnemyKnockback>();
+            //     if (knockback != null)
+            //     {
+            //         knockback.knockback(transform, knockbackForce);
+            //     }
+
+
+
+            // }
     }
 
     void EndAttack()
     {
         isAttacking = false;
     }
-}
+} 

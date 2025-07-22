@@ -10,17 +10,17 @@ public class EnemeyCombat : MonoBehaviour
     public float knockbackForce;
     public LayerMask playerLayer;
 
-    
-    
+
+
     public void Attack()
-{
-    if (AttackPoint == null)
     {
-        Debug.LogError("AttackPoint is not assigned!");
-        return;
-    }
-    
-    Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackPoint.position, weaponRange, playerLayer);
+        if (AttackPoint == null)
+        {
+            Debug.LogError("AttackPoint is not assigned!");
+            return;
+        }
+
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackPoint.position, weaponRange, playerLayer);
         if (hitEnemies.Length > 0)
         {
             PlayerHealth playerHealth = hitEnemies[0].gameObject.GetComponent<PlayerHealth>();
@@ -35,9 +35,10 @@ public class EnemeyCombat : MonoBehaviour
             {
                 Debug.LogError("Player doesn't have PlayerHealth component!");
             }
-        hitEnemies[0].GetComponent<PlayerMovement>().knockback(transform, knockbackForce,StunTime);
+            hitEnemies[0].GetComponent<PlayerMovement>().knockback(transform, knockbackForce, StunTime);
+        }
     }
-}
+
 
     
 }

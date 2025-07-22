@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyFSM : MonoBehaviour
 {
-    private enum State { Idle, Chase, Attack }
+    public enum State { Idle, Chase, Attack, Knockback };
     private State currentState;
 
     public Rigidbody2D rb;
@@ -16,13 +16,11 @@ public class EnemyFSM : MonoBehaviour
     public float attackRange = 2;
     private float attackTimer = 0;
     public float attackCooldown = 2f;
+    public bool isKnockedBack = false;
 
     [Header("Attack Animations")]
     public string attack_up = "attack_up";
-    public string attack_down = "attack_down";
-    public string attack_left = "attack_left";
-    public string attack_right = "attack_right";
-
+    
     // Add reference to EnemeyCombat component
     private EnemeyCombat enemyCombat;
 
@@ -56,28 +54,31 @@ public class EnemyFSM : MonoBehaviour
 
     void Update()
     {
-        CheckForPlayer();
-        if (attackTimer > 0)
+        if (currentState != State.Knockback)
         {
-            attackTimer -= Time.deltaTime;
-        }
-        // Execute behavior based on current state
-        switch (currentState)
-        {
-            case State.Idle:
-                // Do nothing, just idle
-                rb.linearVelocity = Vector2.zero;
-                break;
-            case State.Chase:
-                ChasePlayer();
-                break;
-            case State.Attack:
-                rb.linearVelocity = Vector2.zero;
-                if (Vector2.Distance(transform.position, player.position) > attackRange)
-                {
-                    ChangeState(State.Chase);
-                }
-                break;
+            CheckForPlayer();
+            if (attackTimer > 0)
+            {
+                attackTimer -= Time.deltaTime;
+            }
+            // Execute behavior based on current state
+            switch (currentState)
+            {
+                case State.Idle:
+                    // Do nothing, just idle
+                    rb.linearVelocity = Vector2.zero;
+                    break;
+                case State.Chase:
+                    ChasePlayer();
+                    break;
+                case State.Attack:
+                    rb.linearVelocity = Vector2.zero;
+                    if (Vector2.Distance(transform.position, player.position) > attackRange)
+                    {
+                        ChangeState(State.Chase);
+                    }
+                    break;
+            }
         }
     }
 
@@ -141,7 +142,7 @@ public class EnemyFSM : MonoBehaviour
         }
     }
 
-    void ChangeState(State newState)
+    public void ChangeState(State newState)
     {
         Debug.Log("Changing state from " + currentState + " to " + newState);
 
@@ -158,10 +159,9 @@ public class EnemyFSM : MonoBehaviour
         {
             if (anim != null) anim.SetBool("isAttacking", false);
             if (anim != null) anim.SetBool(attack_up, false);
-            if (anim != null) anim.SetBool(attack_down, false);
-            if (anim != null) anim.SetBool(attack_left, false);
-            if (anim != null) anim.SetBool(attack_right, false);
+            
         }
+        
 
         // Change to new state
         currentState = newState;
@@ -221,8 +221,7 @@ public class EnemyFSM : MonoBehaviour
         }
         else
         {
-            anim.SetBool(attack_down, true);
-            Debug.Log("Enemy attacking DOWN");
+            
         }
     }
     else
@@ -259,9 +258,16 @@ public class EnemyFSM : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
     IEnumerator ResetAttackBools(float delay)
-{
-    yield return new WaitForSeconds(delay); // tunggu animasi selesai
-    
-    anim.SetBool("isAttacking", false);
-}
+    {
+        yield return new WaitForSeconds(delay); // tunggu animasi selesai
+
+        anim.SetBool("isAttacking", false);
+    }
+public void Enemyknockback(Transform player, float force, float duration)
+    {
+        isKnockedBack = true;
+        Vector2 direction = (transform.position - player.position).normalized;
+        rb.linearVelocity = (direction * force);
+       
+    }
 }

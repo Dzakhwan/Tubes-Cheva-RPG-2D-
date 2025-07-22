@@ -5,6 +5,10 @@ public class EnemyHealth : MonoBehaviour
     [Header("Health")]
     public int maxHealth = 3;
     private int currentHealth;
+    // public ExpManager expManager;
+    public int expReward = 2;
+    public delegate void MonsterDefeated(int expReward);
+    public static event MonsterDefeated OnMonsterDefeated;
     
     
    
@@ -18,13 +22,15 @@ public class EnemyHealth : MonoBehaviour
     public void ChangeHealth(int amount)
     {
         currentHealth += amount;
-        
+
         // Trigger hit effect when taking damage
-        
-        
+
+
         if (currentHealth <= 0)
         {
             Die();
+            OnMonsterDefeated(expReward);
+            // expManager.GainExp(2);
         }
     }
     
