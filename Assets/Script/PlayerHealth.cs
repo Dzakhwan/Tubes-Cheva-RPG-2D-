@@ -4,36 +4,35 @@ using UnityEngine.UI; // Tambahkan ini
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] 
-    private int maxHealth = 10;
-    private int currentHealth;
+    
     public Slider healthSlider; // Tambahkan ini
 
     void Start()
     {
-        currentHealth = maxHealth;
+        StatsManager.Instance.currentHealth = StatsManager.Instance.maxHealth;
 
         // Pastikan slider di-set pada awal
         if (healthSlider != null)
         {
-            healthSlider.maxValue = maxHealth;
-            healthSlider.value = currentHealth;
+            healthSlider.maxValue = StatsManager.Instance.maxHealth;
+            healthSlider.value = StatsManager.Instance.currentHealth;
         }
     }
 
     public void changeHealth(int amount)
     {
-        currentHealth += amount;
+        StatsManager.Instance.currentHealth += amount;
 
         // Batas atas dan bawah
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        StatsManager.Instance.currentHealth = Mathf.Clamp(StatsManager.Instance.currentHealth, 0, StatsManager.Instance.maxHealth);
 
         // Update slider
         if (healthSlider != null)
         {
-            healthSlider.value = currentHealth;
+            healthSlider.value = StatsManager.Instance.currentHealth;
         }
 
-        if (currentHealth <= 0)
+        if (StatsManager.Instance.currentHealth <= 0)
         {
             Destroy(gameObject);
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 3;
+    
     public Rigidbody2D rb;
     public int facingDirection = 1;
     bool isRunning = false;
@@ -36,13 +36,13 @@ public class PlayerMovement : MonoBehaviour
             {
                 anim.SetTrigger("run");
 
-                speed = 6; // kecepatan berlari
+                StatsManager.Instance.speed = 6; // kecepatan berlari
             }
             else
             {
-                speed = 3; // kecepatan jalan
+                StatsManager.Instance.speed = 3; // kecepatan jalan
             }
-            rb.linearVelocity = new Vector2(horizontal * speed, vertical * speed);
+            rb.linearVelocity = new Vector2(horizontal , vertical ) * StatsManager.Instance.speed;
         }
     }
     void Flip()

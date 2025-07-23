@@ -5,11 +5,7 @@ public class PlayerAttack : MonoBehaviour
     public Transform attackPoint, attackPointUp, attackPointDown; // Titik serangan
     private Vector2 lastMoveDir = Vector2.right;
     public LayerMask enemyLayer;
-    public float attackRange = 1.5f;
-    public int damageAmount = 3;
-    public float stunTime = 0.5f;
-    public float knockbackTime = 0.2f;
-    public float knockbackForce = 10f;
+
 
     public float slashDuration = 0.5f;
 
@@ -23,7 +19,7 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
-        
+
         Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         if (moveInput != Vector2.zero)
         {
@@ -77,40 +73,62 @@ public class PlayerAttack : MonoBehaviour
             slash.transform.rotation = Quaternion.Euler(0, 0, -90);
 
         // Serang musuh di area
-        Debug.Log("Attacking at position: " + selectedAttackPoint.position + " with range: " + attackRange);
+        Debug.Log("Attacking at position: " + selectedAttackPoint.position + " with range: " + StatsManager.Instance.attackRange);
 
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(selectedAttackPoint.position, attackRange, enemyLayer);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(selectedAttackPoint.position, StatsManager.Instance.attackRange, enemyLayer);
         Debug.Log("Found " + hitEnemies.Length + " enemies in range");
         if (hitEnemies.Length > 0)
         {
-            hitEnemies[0].GetComponent<EnemyHealth>().ChangeHealth(-damageAmount);
-            hitEnemies[0].GetComponent<EnemyKnockback>().knockback(transform, knockbackForce, stunTime, knockbackTime);
+            hitEnemies[0].GetComponent<EnemyHealth>().ChangeHealth(-StatsManager.Instance.damageAmount);
+            hitEnemies[0].GetComponent<EnemyKnockback>().knockback(transform, StatsManager.Instance.knockbackForce, StatsManager.Instance.stunTime, StatsManager.Instance.knockbackTime);
         }
 
         // foreach (Collider2D enemy in hitEnemies)
         // {
         //     Debug.Log("Hit enemy: " + enemy.name);
 
-            //     EnemyHealth health = enemy.GetComponent<EnemyHealth>();
+        //     EnemyHealth health = enemy.GetComponent<EnemyHealth>();
 
-            //     if (health != null)
-            //     {
-            //         Debug.Log("Dealing damage to: ");
-            //         health.ChangeHealth(-damageAmount);
-            //     }
-            //     EnemyKnockback knockback = enemy.GetComponent<EnemyKnockback>();
-            //     if (knockback != null)
-            //     {
-            //         knockback.knockback(transform, knockbackForce);
-            //     }
+        //     if (health != null)
+        //     {
+        //         Debug.Log("Dealing damage to: ");
+        //         health.ChangeHealth(-damageAmount);
+        //     }
+        //     EnemyKnockback knockback = enemy.GetComponent<EnemyKnockback>();
+        //     if (knockback != null)
+        //     {
+        //         knockback.knockback(transform, knockbackForce);
+        //     }
 
 
 
-            // }
+        // }
     }
 
     void EndAttack()
     {
         isAttacking = false;
     }
+    void OnDrawGizmosSelected()
+{
+    if (StatsManager.Instance == null) return;
+
+    Gizmos.color = Color.red;
+
+    // Gambar hanya arah serang terakhir
+    Transform selectedAttackPoint = attackPoint;
+
+    if (Mathf.Abs(lastMoveDir.y) > Mathf.Abs(lastMoveDir.x))
+    {
+        if (lastMoveDir.y > 0)
+            selectedAttackPoint = attackPointUp;
+        else
+            selectedAttackPoint = attackPointDown;
+    }
+
+    if (selectedAttackPoint != null)
+        Gizmos.DrawWireSphere(selectedAttackPoint.position, StatsManager.Instance.attackRange);
+}
+
+
 } 
