@@ -34,12 +34,14 @@ public class PlayerMovement : MonoBehaviour
             }
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                anim.SetTrigger("run");
+                isRunning = true;
+                anim.SetBool("IsRunning", true);
 
                 StatsManager.Instance.speed = 6; // kecepatan berlari
             }
             else
             {
+                anim.SetBool("IsRunning", false);
                 StatsManager.Instance.speed = 3; // kecepatan jalan
             }
             rb.linearVelocity = new Vector2(horizontal , vertical ) * StatsManager.Instance.speed;
