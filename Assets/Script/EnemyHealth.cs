@@ -4,7 +4,7 @@ public class EnemyHealth : MonoBehaviour
 {
     [Header("Health")]
     public int maxHealth = 3;
-    private int currentHealth;
+    public int currentHealth;
     // public ExpManager expManager;
     public int expReward = 2;
     public delegate void MonsterDefeated(int expReward);
