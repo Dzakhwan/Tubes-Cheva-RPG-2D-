@@ -1,40 +1,65 @@
 using UnityEngine;
-using UnityEngine.UI; // Tambahkan ini
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] 
-    
-    public Slider healthSlider; // Tambahkan ini
+    public Slider healthSlider;
+    public Animator anim;
+    public SpriteRenderer spriteRenderer; // untuk efek flash
+
+    private Color originalColor;
 
     void Start()
     {
         StatsManager.Instance.currentHealth = StatsManager.Instance.maxHealth;
 
-        // Pastikan slider di-set pada awal
         if (healthSlider != null)
         {
             healthSlider.maxValue = StatsManager.Instance.maxHealth;
             healthSlider.value = StatsManager.Instance.currentHealth;
         }
+
+        // Simpan warna asli sprite
+        if (spriteRenderer != null)
+            originalColor = spriteRenderer.color;
     }
 
     public void changeHealth(int amount)
     {
         StatsManager.Instance.currentHealth += amount;
-
-        // Batas atas dan bawah
         StatsManager.Instance.currentHealth = Mathf.Clamp(StatsManager.Instance.currentHealth, 0, StatsManager.Instance.maxHealth);
 
-        // Update slider
         if (healthSlider != null)
         {
             healthSlider.value = StatsManager.Instance.currentHealth;
         }
 
+        // Kalau kena damage (amount < 0), mainkan efek flash
+        if (amount < 0)
+            StartCoroutine(WhiteFlash());
+
+        // Kalau mati, mainkan animasi death
         if (StatsManager.Instance.currentHealth <= 0)
         {
-            Destroy(gameObject);
+            anim.SetTrigger("IsDeath");
+        }
+    }
+
+    // Dipanggil dari Animation Event pada akhir animasi death
+    public void OnDeathAnimationEnd()
+    {
+        Destroy(gameObject);
+    }
+
+    // Coroutine untuk efek flash putih
+    private System.Collections.IEnumerator WhiteFlash()
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = Color.black;
+            yield return new WaitForSeconds(0.1f); // durasi flash
+            spriteRenderer.color = originalColor;
         }
     }
 }

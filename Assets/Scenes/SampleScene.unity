@@ -612,7 +612,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 55631776}
-  player: {fileID: 0}
+  player: {fileID: 118584799}
   detectionPoint: {fileID: 508229169}
   anim: {fileID: 55631779}
   playerDetectionRange: 7
@@ -5025,19 +5025,47 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1934833568741754120, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
       propertyPath: attackDuration
-      value: 0.1
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 1934833568741754120, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
       propertyPath: knockbackForce
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 4229408078708490623, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4229408078708490623, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4229408078708490623, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4229408078708490623, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 4355777934079299831, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.0475
+      objectReference: {fileID: 0}
+    - target: {fileID: 4355777934079299831, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 4355777934079299831, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.15
+      objectReference: {fileID: 0}
     - target: {fileID: 4355777934079299831, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.433
+      value: -0.463
       objectReference: {fileID: 0}
     - target: {fileID: 4355777934079299831, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.085
+      value: 0.074
       objectReference: {fileID: 0}
     - target: {fileID: 5333220074332624530, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
       propertyPath: m_Name
@@ -5052,9 +5080,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8290760399818970037, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 1425587903}
+    - target: {fileID: 8290760399818970037, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
       propertyPath: healthSlider
       value: 
       objectReference: {fileID: 1010740834}
+    - target: {fileID: 8290760399818970037, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
+      propertyPath: spriteRenderer
+      value: 
+      objectReference: {fileID: 1425587904}
     - target: {fileID: 8683825192379126375, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
       propertyPath: m_LocalPosition.x
       value: -47.93
@@ -5307,7 +5343,7 @@ MonoBehaviour:
   damageAmount: 3
   stunTime: 0.5
   speed: 3
-  maxHealth: 10
+  maxHealth: 3
   currentHealth: 0
 --- !u!4 &796965123
 Transform:
@@ -24030,6 +24066,16 @@ RectTransform:
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2792401975384280169, guid: ec8c8bd7d20bdbf41b01a3280b4157e9, type: 3}
   m_PrefabInstance: {fileID: 793700723221807132}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1425587903 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6655415250046198446, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
+  m_PrefabInstance: {fileID: 590914573}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &1425587904 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 4229408078708490623, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
+  m_PrefabInstance: {fileID: 590914573}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1515279119 stripped
 GameObject:

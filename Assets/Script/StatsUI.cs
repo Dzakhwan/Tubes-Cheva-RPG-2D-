@@ -6,7 +6,7 @@ public class StatsUI : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public GameObject[] stats;
     public GameObject statsPanel;
-      private bool isVisible = false;
+      
 
      private void Start()
     {
