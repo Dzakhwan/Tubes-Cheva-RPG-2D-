@@ -5024,8 +5024,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1934833568741754120, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
+      propertyPath: slashDuration
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1934833568741754120, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
       propertyPath: attackDuration
-      value: 0.4
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1934833568741754120, guid: faae57f8d3a5f9548bc974eec0e7b1c3, type: 3}
       propertyPath: knockbackForce
