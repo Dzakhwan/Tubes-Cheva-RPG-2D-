@@ -568,15 +568,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65e1632c2e158dd4b8b6db49a6172dfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1
-  anim: {fileID: 55631779}
-  AttackPoint: {fileID: 1097961825}
-  weaponRange: 2.5
-  StunTime: 0.5
-  knockbackForce: 5
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 8
 --- !u!95 &55631779
 Animator:
   serializedVersion: 7
@@ -611,19 +602,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8a96718c1fccae43b32a2de7ab6c537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 55631776}
-  player: {fileID: 118584799}
-  detectionPoint: {fileID: 508229169}
-  anim: {fileID: 55631779}
-  playerDetectionRange: 7
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  speed: 3
-  attackRange: 2
-  attackCooldown: 1
-  isKnockedBack: 0
-  attack_up: attack_up
 --- !u!58 &55631781
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -672,15 +650,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce9266cd53e858146a6eca79c107afa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
-  currentHealth: 0
-  lootItems:
-  - itemPrefab: {fileID: 7978744093375785428, guid: 0cf592c3b6b704f4884e11891e7b5c47, type: 3}
-    dropChance: 100
-  - itemPrefab: {fileID: 0}
-    dropChance: 0
-  spriteRenderer: {fileID: 55631773}
-  expReward: 2
 --- !u!114 &55631784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,7 +662,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ad4eccbedef0ac42b98ea1278545d5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stunTime: 1
 --- !u!1001 &84536249
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5348,7 +5316,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -104689,7 +104657,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 649223268058989734, guid: ebd7f389abadf8e43b84cbfb8bf88881, type: 3}
+  m_Sprite: {fileID: -4062793097905510587, guid: 1dd8143ec886d8746b856771f420ffff, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
