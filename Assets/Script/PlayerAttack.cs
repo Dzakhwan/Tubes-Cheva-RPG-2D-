@@ -3,13 +3,12 @@ using System.Collections;
 
 public class PlayerAttack : MonoBehaviour
 {
-    public GameObject slashEffect;                   // Prefab slash effect
-    public Transform attackPoint, attackPointUp, attackPointDown; // Titik serangan
+    public GameObject slashEffect;
+    public Transform attackPoint, attackPointUp, attackPointDown;
     private Vector2 lastMoveDir = Vector2.right;
     public LayerMask enemyLayer;
 
-    public float slashDuration = 0.5f;               // Waktu efek slash bertahan
-    public float slashDelay = 0.1f;                  // Jeda sebelum slash muncul
+    public float slashDuration = 0.5f;
 
     public Transform weaponParent;
     public GameObject weaponObject;
@@ -22,6 +21,9 @@ public class PlayerAttack : MonoBehaviour
     private int comboStep = 0;
     private float comboResetTime = 1f;
     private float comboTimer = 0f;
+
+    private Transform currentAttackPoint;
+    private Vector2 currentAttackDir;
 
     void Update()
     {
@@ -69,36 +71,37 @@ public class PlayerAttack : MonoBehaviour
         if (anim != null)
             anim.SetTrigger("Attack" + comboIndex);
 
-        Transform selectedAttackPoint = attackPoint;
-        if (Mathf.Abs(lastMoveDir.y) > Mathf.Abs(lastMoveDir.x))
-        {
-            selectedAttackPoint = lastMoveDir.y > 0 ? attackPointUp : attackPointDown;
-        }
+        // Simpan arah dan posisi saat serangan dimulai
+        currentAttackDir = lastMoveDir;
 
-        // Kirim posisi dan arah saat itu ke coroutine
-        StartCoroutine(DelayedSlash(selectedAttackPoint.position, lastMoveDir));
+        currentAttackPoint = attackPoint;
+        if (Mathf.Abs(currentAttackDir.y) > Mathf.Abs(currentAttackDir.x))
+        {
+            currentAttackPoint = currentAttackDir.y > 0 ? attackPointUp : attackPointDown;
+        }
     }
 
-    IEnumerator DelayedSlash(Vector3 slashPosition, Vector2 moveDir)
+    /// <summary>
+    /// Dipanggil oleh Animation Event di animasi serangan
+    /// </summary>
+    public void TriggerSlash()
     {
-        yield return new WaitForSeconds(slashDelay);
+        if (currentAttackPoint == null) return;
 
-        GameObject slash = Instantiate(slashEffect, slashPosition, Quaternion.identity);
+        GameObject slash = Instantiate(slashEffect, currentAttackPoint.position, Quaternion.identity);
         Destroy(slash, slashDuration);
 
-        // Rotasi efek berdasarkan arah saat serang
-        if (moveDir.x > 0)
+        if (currentAttackDir.x > 0)
             slash.transform.rotation = Quaternion.Euler(0, 0, 0);
-        else if (moveDir.x < 0)
+        else if (currentAttackDir.x < 0)
             slash.transform.rotation = Quaternion.Euler(0, 180, 0);
-        else if (moveDir.y > 0)
+        else if (currentAttackDir.y > 0)
             slash.transform.rotation = Quaternion.Euler(0, 0, 90);
-        else if (moveDir.y < 0)
+        else if (currentAttackDir.y < 0)
             slash.transform.rotation = Quaternion.Euler(0, 0, -90);
 
-        // Deteksi musuh di posisi saat itu
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(
-            slashPosition,
+            currentAttackPoint.position,
             StatsManager.Instance.attackRange,
             enemyLayer
         );
@@ -125,8 +128,8 @@ public class PlayerAttack : MonoBehaviour
         if (StatsManager.Instance == null) return;
 
         Gizmos.color = Color.red;
-
         Transform selectedAttackPoint = attackPoint;
+
         if (Mathf.Abs(lastMoveDir.y) > Mathf.Abs(lastMoveDir.x))
         {
             selectedAttackPoint = lastMoveDir.y > 0 ? attackPointUp : attackPointDown;

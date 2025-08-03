@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 1281071938137401416}
   - component: {fileID: 1504064913414657007}
   - component: {fileID: 5231029897759394889}
+  - component: {fileID: 7531552271407602581}
   m_Layer: 0
   m_Name: Hand_sword_0
   m_TagString: Untagged
@@ -144,6 +145,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7531552271407602581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4609688353537937402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7de53ac5ae43cd941af7806092a5be3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerAttack: {fileID: 0}
 --- !u!1 &4853730962233278296
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,7 +318,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f41a7263073c25645aad929cdb1e4da3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
   rb: {fileID: 7719650863617773782}
   facingDirection: 1
   anim: {fileID: 6655415250046198446}
@@ -320,8 +333,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de814b43d4f66d94697bd249c662b702, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
   healthSlider: {fileID: 0}
+  anim: {fileID: 6655415250046198446}
+  spriteRenderer: {fileID: 4229408078708490623}
 --- !u!50 &7719650863617773782
 Rigidbody2D:
   serializedVersion: 5
@@ -379,7 +393,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -405,16 +419,11 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
-  attackRange: 1.5
-  damageAmount: 3
-  stunTime: 0.5
-  knockbackTime: 0.2
-  knockbackForce: 20
   slashDuration: 0.1
   weaponParent: {fileID: 8160700919012120301}
   weaponObject: {fileID: 4609688353537937402}
   anim: {fileID: 5231029897759394889}
-  attackDuration: 0.3
+  attackDuration: 0.1
 --- !u!1 &8544292609592349868
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,8 +480,8 @@ Transform:
   m_GameObject: {fileID: 8775899938022165570}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.06, y: 0.076, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.463, y: 0.074, z: 0}
+  m_LocalScale: {x: 1.0475, y: 1.96, z: 1.15}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1281071938137401416}

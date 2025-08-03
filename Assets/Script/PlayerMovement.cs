@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
                 isRunning = true;
                 anim.SetBool("IsRunning", true);
 
-                StatsManager.Instance.speed = 6; // kecepatan berlari
+                StatsManager.Instance.speed = 4.5f; // kecepatan berlari
             }
             else
             {
