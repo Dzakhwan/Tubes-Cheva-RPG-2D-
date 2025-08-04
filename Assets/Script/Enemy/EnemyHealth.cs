@@ -9,7 +9,7 @@ public class EnemyHealth : MonoBehaviour
     public int currentHealth;
     [Header("Loot")]
     public List<LootItem> lootItems = new List<LootItem>(); // List of loot items>
-    public SpriteRenderer spriteRenderer;
+    private SpriteRenderer spriteRenderer;
     // public ExpManager expManager;
     public int expReward = 2;
     public delegate void MonsterDefeated(int expReward);
