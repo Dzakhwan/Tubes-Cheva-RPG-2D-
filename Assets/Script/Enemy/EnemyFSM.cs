@@ -20,6 +20,7 @@ public class EnemyFSM : MonoBehaviour
 
     [Header("Attack Animations")]
     public string attack_up = "attack_up";
+    public string attack_down = "attack_down";
     
     // Add reference to EnemeyCombat component
     private EnemeyCombat enemyCombat;
@@ -159,6 +160,7 @@ public class EnemyFSM : MonoBehaviour
         {
             if (anim != null) anim.SetBool("isAttacking", false);
             if (anim != null) anim.SetBool(attack_up, false);
+            if (anim != null) anim.SetBool(attack_down, false);
             
         }
         
@@ -221,7 +223,8 @@ public class EnemyFSM : MonoBehaviour
         }
         else
         {
-            
+            anim.SetBool(attack_down, true);
+            Debug.Log("Enemy attacking UP");
         }
     }
     else

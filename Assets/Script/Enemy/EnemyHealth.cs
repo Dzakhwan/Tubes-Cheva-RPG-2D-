@@ -20,6 +20,7 @@ public class EnemyHealth : MonoBehaviour
 
     void Start()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         currentHealth = maxHealth;
 
     }
