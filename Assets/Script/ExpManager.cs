@@ -16,10 +16,10 @@ public class ExpManager : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            GainExp(2);
-        }
+        // if (Input.GetKeyDown(KeyCode.Return))
+        // {
+        //     GainExp(2);
+        // }
     }
     private void OnEnable()
     {

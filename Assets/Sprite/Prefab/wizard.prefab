@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 5795074307483944624}
   - component: {fileID: 2495202843017072002}
   - component: {fileID: 5594983960802002950}
-  - component: {fileID: 8427775402728506834}
   m_Layer: 3
   m_Name: wizard
   m_TagString: Player
@@ -104,7 +103,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f41a7263073c25645aad929cdb1e4da3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
   rb: {fileID: 2495202843017072002}
   facingDirection: 1
   anim: {fileID: 5795074307483944624}
@@ -194,17 +192,3 @@ CapsuleCollider2D:
   m_Offset: {x: -0.010158638, y: -0.01042457}
   m_Size: {x: 0.27948427, y: 0.51272184}
   m_Direction: 0
---- !u!114 &8427775402728506834
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2861768750273185907}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de814b43d4f66d94697bd249c662b702, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 10
-  healthSlider: {fileID: 0}

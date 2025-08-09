@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -101,21 +102,31 @@ public class PlayerAttack : MonoBehaviour
             slash.transform.rotation = Quaternion.Euler(0, 0, -90);
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(
-            currentAttackPoint.position,
-            StatsManager.Instance.attackRange,
-            enemyLayer
-        );
+    currentAttackPoint.position,
+    StatsManager.Instance.attackRange,
+    enemyLayer
+);
 
-        if (hitEnemies.Length > 0)
-        {
-            hitEnemies[0].GetComponent<EnemyHealth>().ChangeHealth(-StatsManager.Instance.damageAmount);
-            hitEnemies[0].GetComponent<EnemyKnockback>().knockback(
-                transform,
-                StatsManager.Instance.knockbackForce,
-                StatsManager.Instance.stunTime,
-                StatsManager.Instance.knockbackTime
-            );
-        }
+// Loop melalui semua musuh yang kena hitbox
+foreach (Collider2D enemy in hitEnemies)
+{
+    // Berikan damage jika memiliki EnemyHealth
+    if (enemy.TryGetComponent<EnemyHealth>(out var enemyHealth))
+    {
+        enemyHealth.ChangeHealth(-StatsManager.Instance.damageAmount);
+    }
+
+    // Berikan knockback jika memiliki EnemyKnockback
+    if (enemy.TryGetComponent<EnemyKnockback>(out var enemyKnockback))
+    {
+        enemyKnockback.knockback(
+            transform,  // Posisi pemain (sumber serangan)
+            StatsManager.Instance.knockbackForce,
+            StatsManager.Instance.stunTime,
+            StatsManager.Instance.knockbackTime
+        );
+    }
+}
     }
 
     void EndAttack()
@@ -123,19 +134,5 @@ public class PlayerAttack : MonoBehaviour
         isAttacking = false;
     }
 
-    void OnDrawGizmosSelected()
-    {
-        if (StatsManager.Instance == null) return;
-
-        Gizmos.color = Color.red;
-        Transform selectedAttackPoint = attackPoint;
-
-        if (Mathf.Abs(lastMoveDir.y) > Mathf.Abs(lastMoveDir.x))
-        {
-            selectedAttackPoint = lastMoveDir.y > 0 ? attackPointUp : attackPointDown;
-        }
-
-        if (selectedAttackPoint != null)
-            Gizmos.DrawWireSphere(selectedAttackPoint.position, StatsManager.Instance.attackRange);
-    }
+   
 }

@@ -14,6 +14,7 @@ public class EnemyHealth : MonoBehaviour
     public int expReward = 2;
     public delegate void MonsterDefeated(int expReward);
     public static event MonsterDefeated OnMonsterDefeated;
+    public Animator anim;
 
 
 
@@ -35,13 +36,14 @@ public class EnemyHealth : MonoBehaviour
             StartCoroutine(BlackFlash());
         if (currentHealth <= 0)
             {
-                Die();
+                anim.SetTrigger("IsDeath");
+                
                 OnMonsterDefeated(expReward);
                 // expManager.GainExp(2);
             }
     }
 
-    void Die()
+    public void Die()
     {
         // Add death logic here
         Debug.Log(gameObject.name + " has died!");
@@ -52,6 +54,7 @@ public class EnemyHealth : MonoBehaviour
                 Instantiate(item.itemPrefab, transform.position, Quaternion.identity);
             }
         }
+        
         Destroy(gameObject);
     }
 
