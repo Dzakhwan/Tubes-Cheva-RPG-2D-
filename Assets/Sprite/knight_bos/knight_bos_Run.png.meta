@@ -64,7 +64,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -385,7 +385,17 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      knight_bos_Run_0: 7179235386410943721
+      knight_bos_Run_1: -4992452075485620855
+      knight_bos_Run_2: -8476303191084758293
+      knight_bos_Run_3: 6892460584104754220
+      knight_bos_Run_4: -3133636576644720282
+      knight_bos_Run_5: -2454664016870891645
+      knight_bos_Run_6: 163266366495739413
+      knight_bos_Run_7: -1723001426853927086
+      knight_bos_Run_8: -284228022213553359
+      knight_bos_Run_9: 84902235772961574
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

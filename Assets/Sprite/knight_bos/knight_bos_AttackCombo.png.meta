@@ -64,7 +64,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -385,7 +385,17 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      knight_bos_AttackCombo_0: -533223299648974483
+      knight_bos_AttackCombo_1: -1802205997381876855
+      knight_bos_AttackCombo_2: -1281887270800292032
+      knight_bos_AttackCombo_3: 5435401512584762505
+      knight_bos_AttackCombo_4: -3741997320119526396
+      knight_bos_AttackCombo_5: 2227517176628713253
+      knight_bos_AttackCombo_6: -7458776157363147417
+      knight_bos_AttackCombo_7: 6527718820315413494
+      knight_bos_AttackCombo_8: -7827639267258161780
+      knight_bos_AttackCombo_9: -9042798409993021906
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

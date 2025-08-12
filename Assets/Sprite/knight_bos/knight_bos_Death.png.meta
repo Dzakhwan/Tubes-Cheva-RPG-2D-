@@ -64,7 +64,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -385,7 +385,17 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      knight_bos_Death_0: -4068907987415289716
+      knight_bos_Death_1: -7196341527881402058
+      knight_bos_Death_2: -772411781425940496
+      knight_bos_Death_3: -7744720039419621796
+      knight_bos_Death_4: 3704340721718647869
+      knight_bos_Death_5: 2575332586923418453
+      knight_bos_Death_6: -699127332221847754
+      knight_bos_Death_7: -5573325305804228876
+      knight_bos_Death_8: 1887182611500767336
+      knight_bos_Death_9: 2253770228462933208
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
