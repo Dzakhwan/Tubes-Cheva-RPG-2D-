@@ -302,7 +302,7 @@ MonoBehaviour:
   maxHealth: 3
   currentHealth: 0
   lootItems:
-  - itemPrefab: {fileID: 0}
+  - itemPrefab: {fileID: 7978744093375785428, guid: 0cf592c3b6b704f4884e11891e7b5c47, type: 3}
     dropChance: 52.6
   expReward: 1
   anim: {fileID: 1641684958940843272}

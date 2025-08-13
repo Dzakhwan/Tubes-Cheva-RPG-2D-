@@ -1,7 +1,7 @@
-
 using System.Collections;
+using Unity.Collections;
 using UnityEngine;
-
+using Pathfinding;
 public class EnemyFSM : MonoBehaviour
 {
     public enum State { Idle, Chase, Attack, Knockback };
@@ -21,6 +21,9 @@ public class EnemyFSM : MonoBehaviour
     [Header("Attack Animations")]
     public string attack_up = "attack_up";
     public string attack_down = "attack_down";
+    [Header("Pathfinding")]
+    public AIDestinationSetter aiDestinationSetter;
+    private bool usePathfinding = true;
     
     // Add reference to EnemeyCombat component
     private EnemeyCombat enemyCombat;
@@ -81,6 +84,11 @@ public class EnemyFSM : MonoBehaviour
                     break;
             }
         }
+         if (transform.parent != null)
+    {
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+    }
     }
 
     void ChasePlayer()
@@ -110,6 +118,11 @@ public class EnemyFSM : MonoBehaviour
         {
             player = hits[0].transform;
             float distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
+             if (usePathfinding && aiDestinationSetter != null)
+            {
+                aiDestinationSetter.enabled = true;
+                aiDestinationSetter.target = player;
+            }
 
             Debug.Log("Player detected! Distance: " + distanceToPlayer + ", Current State: " + currentState);
 
@@ -126,7 +139,7 @@ public class EnemyFSM : MonoBehaviour
                 ChangeState(State.Attack);
             }
             // Jika di luar attack range, chase
-            else if (distanceToPlayer > attackRange && currentState != State.Attack)
+            else if (distanceToPlayer > attackRange && currentState != State.Attack && aiDestinationSetter == true)
             {
                 ChangeState(State.Chase);
             }
@@ -139,8 +152,13 @@ public class EnemyFSM : MonoBehaviour
         }
         else
         {
+             if (usePathfinding && aiDestinationSetter != null)
+            {
+                aiDestinationSetter.enabled = false;
+            }
             ChangeState(State.Idle);
         }
+        
     }
 
     public void ChangeState(State newState)
