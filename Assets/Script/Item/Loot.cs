@@ -24,6 +24,7 @@ public class Loot : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             OnItemLooted?.Invoke(itemSO, quantity);
+            SoundEffectManager.Play("Coin");
             Destroy(gameObject);
         }
     }
