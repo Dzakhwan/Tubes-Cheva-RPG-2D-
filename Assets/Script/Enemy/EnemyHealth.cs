@@ -55,7 +55,7 @@ public class EnemyHealth : MonoBehaviour
             }
         }
         
-        Destroy(gameObject);
+        Destroy(transform.parent.gameObject);
     }
 
     public int GetCurrentHealth()
