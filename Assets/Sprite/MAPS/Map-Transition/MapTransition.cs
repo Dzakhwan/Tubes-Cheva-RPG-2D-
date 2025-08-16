@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.Experimental.GraphView;
+
 using Unity.Cinemachine;
 
 public class MapTransition : MonoBehaviour
