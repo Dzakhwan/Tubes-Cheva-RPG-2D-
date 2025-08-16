@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    
+
     public Rigidbody2D rb;
     public int facingDirection = 1;
     bool isRunning = false;
     private bool isKnockedBack = false;
     public Animator anim;
+
+    private bool playingFootsteps = false;
+    public float walkFootstepSpeed = 0.5f;
+    public float runFootstepSpeed = 0.2f;
+
+    private string currentFootstepSound = "Footstep";
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -34,17 +40,43 @@ public class PlayerMovement : MonoBehaviour
             }
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                isRunning = true;
-                anim.SetBool("IsRunning", true);
+                if (!isRunning)
+                {
+                    isRunning = true;
+                    if (playingFootsteps)
+                    {
+                        StopFootsteps();
+                        StartFootsteps();
+                    }
+                }
 
+                anim.SetBool("IsRunning", true);
                 StatsManager.Instance.speed = 4.5f; // kecepatan berlari
             }
             else
             {
+                if (isRunning)
+                {
+                    isRunning = false;
+                    if (playingFootsteps)
+                    {
+                        StopFootsteps();
+                        StartFootsteps();
+                    }
+                }
                 anim.SetBool("IsRunning", false);
                 StatsManager.Instance.speed = 3; // kecepatan jalan
             }
-            rb.linearVelocity = new Vector2(horizontal , vertical ) * StatsManager.Instance.speed;
+            rb.linearVelocity = new Vector2(horizontal, vertical) * StatsManager.Instance.speed;
+
+            if ((horizontal != 0 || vertical != 0) && !playingFootsteps)
+            {
+                StartFootsteps();
+            }
+            else if (horizontal == 0 && vertical == 0 && playingFootsteps)
+            {
+                StopFootsteps();
+            }
         }
     }
     void Flip()
@@ -64,5 +96,30 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(duration);
         rb.linearVelocity = Vector2.zero;
         isKnockedBack = false;
+    }
+
+    void StartFootsteps()
+    {
+        CancelInvoke(nameof(PlayFootstep));
+
+        playingFootsteps = true;
+        float speed = isRunning ? runFootstepSpeed : walkFootstepSpeed;
+        InvokeRepeating(nameof(PlayFootstep), 0f, speed);
+    }
+
+    void StopFootsteps()
+    {
+        playingFootsteps = false;
+        CancelInvoke(nameof(PlayFootstep));
+    }
+
+    void PlayFootstep()
+    {
+        SoundEffectManager.Play(currentFootstepSound);
+    }
+
+    public void SetFootstepSound(string soundName)
+    {
+        currentFootstepSound = soundName;
     }
 }

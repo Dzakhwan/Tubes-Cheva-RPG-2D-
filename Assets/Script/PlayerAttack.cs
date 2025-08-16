@@ -72,6 +72,8 @@ public class PlayerAttack : MonoBehaviour
         if (anim != null)
             anim.SetTrigger("Attack" + comboIndex);
 
+        SoundEffectManager.Play("Swing");
+
         // Simpan arah dan posisi saat serangan dimulai
         currentAttackDir = lastMoveDir;
 
