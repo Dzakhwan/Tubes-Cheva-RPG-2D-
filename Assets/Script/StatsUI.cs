@@ -45,6 +45,10 @@ public class StatsUI : MonoBehaviour
     {
         stats[5].GetComponentInChildren<TMP_Text>().text = "Stun: " + StatsManager.Instance.stunTime;
     }
+    public void CurrentHealth()
+    {
+        stats[6].GetComponentInChildren<TMP_Text>().text = "Health: " + StatsManager.Instance.currentHealth;
+    }
     public void UpdateStats()
     {
         UpdateDamage();
@@ -53,5 +57,6 @@ public class StatsUI : MonoBehaviour
         UpdateRange();
         UpdateSpeed();
         UpdateStun();
+        CurrentHealth();
     }
 }

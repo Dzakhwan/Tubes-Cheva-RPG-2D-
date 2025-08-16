@@ -115,17 +115,19 @@ foreach (Collider2D enemy in hitEnemies)
     {
         enemyHealth.ChangeHealth(-StatsManager.Instance.damageAmount);
     }
+    if (enemy.TryGetComponent<BossHealth>(out var bossHealth))
+        bossHealth.ChangeHealth(-StatsManager.Instance.damageAmount); // Add this line (>)
 
-    // Berikan knockback jika memiliki EnemyKnockback
-    if (enemy.TryGetComponent<EnemyKnockback>(out var enemyKnockback))
-    {
-        enemyKnockback.knockback(
-            transform,  // Posisi pemain (sumber serangan)
-            StatsManager.Instance.knockbackForce,
-            StatsManager.Instance.stunTime,
-            StatsManager.Instance.knockbackTime
-        );
-    }
+                // Berikan knockback jika memiliki EnemyKnockback
+                if (enemy.TryGetComponent<EnemyKnockback>(out var enemyKnockback))
+                {
+                    enemyKnockback.knockback(
+                        transform,  // Posisi pemain (sumber serangan)
+                        StatsManager.Instance.knockbackForce,
+                        StatsManager.Instance.stunTime,
+                        StatsManager.Instance.knockbackTime
+                    );
+                }
 }
     }
 
