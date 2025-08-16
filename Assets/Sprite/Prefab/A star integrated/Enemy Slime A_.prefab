@@ -168,32 +168,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5444318492455956884, guid: d309ae7af6c83684e8b53979704808bd, type: 3}
-      propertyPath: aiPath
-      value: 
-      objectReference: {fileID: 1112216230965797259}
-    - target: {fileID: 5444318492455956884, guid: d309ae7af6c83684e8b53979704808bd, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5444318492455956884, guid: d309ae7af6c83684e8b53979704808bd, type: 3}
       propertyPath: aiDestinationSetter
       value: 
       objectReference: {fileID: 1309688090072296764}
-    - target: {fileID: 5444318492455956884, guid: d309ae7af6c83684e8b53979704808bd, type: 3}
-      propertyPath: playerDetectionRange
-      value: 5.17
-      objectReference: {fileID: 0}
     - target: {fileID: 6972698590019750066, guid: d309ae7af6c83684e8b53979704808bd, type: 3}
       propertyPath: m_Name
       value: slime
-      objectReference: {fileID: 0}
-    - target: {fileID: 9004831767339154005, guid: d309ae7af6c83684e8b53979704808bd, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.012
-      objectReference: {fileID: 0}
-    - target: {fileID: 9004831767339154005, guid: d309ae7af6c83684e8b53979704808bd, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.05
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

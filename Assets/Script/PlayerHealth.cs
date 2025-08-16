@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] 
+    [SerializeField]
     public Slider healthSlider;
     public Animator anim;
     public SpriteRenderer spriteRenderer; // untuk efek flash
@@ -25,6 +25,7 @@ public class PlayerHealth : MonoBehaviour
             originalColor = spriteRenderer.color;
     }
 
+
     public void changeHealth(int amount)
     {
         StatsManager.Instance.currentHealth += amount;
@@ -44,8 +45,25 @@ public class PlayerHealth : MonoBehaviour
         {
             anim.SetTrigger("IsDeath");
         }
+       
     }
+ public void Heal(int amount)
+    {
+        if (StatsManager.Instance.currentHealth >= StatsManager.Instance.maxHealth)
+            return; // Already at full health
 
+        StatsManager.Instance.currentHealth += amount;
+        StatsManager.Instance.currentHealth = Mathf.Clamp(
+            StatsManager.Instance.currentHealth, 
+            0, 
+            StatsManager.Instance.maxHealth
+        );
+
+        if (healthSlider != null)
+            healthSlider.value = StatsManager.Instance.currentHealth;
+
+        StartCoroutine(HealFlash()); // Visual feedback
+    }
     // Dipanggil dari Animation Event pada akhir animasi death
     public void OnDeathAnimationEnd()
     {
@@ -62,4 +80,13 @@ public class PlayerHealth : MonoBehaviour
             spriteRenderer.color = originalColor;
         }
     }
+    private System.Collections.IEnumerator HealFlash()
+{
+    if (spriteRenderer != null)
+    {
+        spriteRenderer.color = Color.green;
+        yield return new WaitForSeconds(0.2f);
+        spriteRenderer.color = originalColor;
+    }
+}
 }

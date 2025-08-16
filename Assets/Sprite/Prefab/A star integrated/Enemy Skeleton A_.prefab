@@ -267,7 +267,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 4723107735738678597, guid: 1018b0ba13578bf459bd254ae1a2be99, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -461,10 +461,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce9266cd53e858146a6eca79c107afa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
+  maxHealth: 12
   currentHealth: 0
   lootItems:
   - itemPrefab: {fileID: 7978744093375785428, guid: 0cf592c3b6b704f4884e11891e7b5c47, type: 3}
+    dropChance: 100
+  - itemPrefab: {fileID: 6055008478031136540, guid: 003a8b664fb69ae4983091be496d5db7, type: 3}
     dropChance: 100
   expReward: 2
   anim: {fileID: 1482386195823667957}

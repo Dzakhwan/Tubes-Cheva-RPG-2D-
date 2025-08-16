@@ -24,11 +24,13 @@ public class ExpManager : MonoBehaviour
     private void OnEnable()
     {
         EnemyHealth.OnMonsterDefeated += GainExp;
+        BossHealth.OnBossDefeated += GainExp;
     }
 
     private void OnDisable()
     {
         EnemyHealth.OnMonsterDefeated -= GainExp;
+        BossHealth.OnBossDefeated -= GainExp;
     }
 
     public void GainExp(int amount)
