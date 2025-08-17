@@ -24,7 +24,11 @@ public class EnemyFSM : MonoBehaviour
     [Header("Pathfinding")]
     public AIDestinationSetter aiDestinationSetter;
     private bool usePathfinding = true;
-    
+
+    [Header("SlimeStep Setting")]
+    public float footStepInterval = 0.5f;
+    private float footStepTimer = 0f;
+
     // Add reference to EnemeyCombat component
     private EnemeyCombat enemyCombat;
 
@@ -74,6 +78,14 @@ public class EnemyFSM : MonoBehaviour
                     break;
                 case State.Chase:
                     ChasePlayer();
+                    if (footStepTimer > 0)
+                        footStepTimer -= Time.deltaTime;
+
+                    if (footStepTimer <= 0)
+                    {
+                        SoundEffectManager.Play("SlimeStep");
+                        footStepTimer = footStepInterval; // reset timer
+                    }
                     break;
                 case State.Attack:
                     rb.linearVelocity = Vector2.zero;
@@ -291,4 +303,14 @@ public void Enemyknockback(Transform player, float force, float duration)
         rb.linearVelocity = (direction * force);
        
     }
+
+    void PlayFootstep()
+    {
+        if (footStepTimer <= 0)
+        {
+            SoundEffectManager.Play("SlimeStep");
+            footStepTimer = footStepInterval;
+        }
+    }
 }
+
