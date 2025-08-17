@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6759555829431770715}
   - component: {fileID: 8216468251652026931}
   - component: {fileID: 1794625703064605648}
+  - component: {fileID: 7596188190498734839}
   m_Layer: 0
   m_Name: portal
   m_TagString: Untagged
@@ -128,6 +129,43 @@ MonoBehaviour:
   direction: 4
   teleportTargetPosition: {fileID: 1211674119524730957}
   player: {fileID: 0}
+--- !u!70 &7596188190498734839
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438048992420789665}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.011665344, y: -0.058322906}
+  m_Size: {x: 1.5767059, y: 2.570137}
+  m_Direction: 0
 --- !u!1 &2495589335841390933
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,7 +191,7 @@ Transform:
   m_GameObject: {fileID: 2495589335841390933}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.03, y: -0.26, z: 0}
+  m_LocalPosition: {x: -120.14, y: 67.34, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

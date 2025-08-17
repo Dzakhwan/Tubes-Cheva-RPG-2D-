@@ -84,7 +84,7 @@ public class BossFSM : MonoBehaviour
     void Update()
     {
         // Don't do anything if dead
-        if (isDead) return;
+        if (isDead || currentState == State.Death) return;
         
         if (currentState != State.Knockback && currentState != State.Death)
         {
@@ -147,7 +147,7 @@ public class BossFSM : MonoBehaviour
 
     private void CheckForPlayer()
     {
-        if (detectionPoint == null)
+        if (detectionPoint == null || isDead)
         {
             Debug.LogError("DetectionPoint is not assigned!");
             return;
@@ -307,6 +307,12 @@ public class BossFSM : MonoBehaviour
                 anim.SetTrigger("isDeath");
                 isDead = true;
                 rb.linearVelocity = Vector2.zero;
+                 Collider2D col = GetComponent<Collider2D>();
+                if (col != null)
+                {
+                    col.enabled = false;
+                    Destroy(gameObject, 1f);
+                }
                 // Disable pathfinding
                 if (pathfindingInitialized)
                 {
@@ -353,10 +359,12 @@ public class BossFSM : MonoBehaviour
         if (!isDead && currentState != State.Death && anim != null)
         {
             // Trigger hit animation without changing state
+            anim.ResetTrigger("isHit");
             anim.SetTrigger("isHit");
             Debug.Log("Boss hit animation triggered");
         }
     }
+    
 
     // Called from BossHealth when dying
     public void OnDeath()
