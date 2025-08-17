@@ -72,7 +72,7 @@ public class PlayerAttack : MonoBehaviour
         if (anim != null)
             anim.SetTrigger("Attack" + comboIndex);
 
-        SoundEffectManager.Play("Swing");
+        
 
         // Simpan arah dan posisi saat serangan dimulai
         currentAttackDir = lastMoveDir;
@@ -90,6 +90,8 @@ public class PlayerAttack : MonoBehaviour
     public void TriggerSlash()
     {
         if (currentAttackPoint == null) return;
+
+        SoundEffectManager.Play("Swing");
 
         GameObject slash = Instantiate(slashEffect, currentAttackPoint.position, Quaternion.identity);
         Destroy(slash, slashDuration);

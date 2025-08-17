@@ -38,8 +38,10 @@ public class PlayerHealth : MonoBehaviour
 
         // Kalau kena damage (amount < 0), mainkan efek flash
         if (amount < 0)
+        {
+            SoundEffectManager.Play("Hit");
             StartCoroutine(WhiteFlash());
-
+        }
         // Kalau mati, mainkan animasi death
         if (StatsManager.Instance.currentHealth <= 0)
         {
