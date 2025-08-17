@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; // Tambahin ini biar bisa akses Slider
+using UnityEngine.UI;
 
 public class BossHealth : MonoBehaviour
 {
@@ -10,7 +10,7 @@ public class BossHealth : MonoBehaviour
     public int currentHealth;
 
     [Header("UI")]
-    public Slider bossSlider; // Slider health di Canvas
+    public Slider bossSlider;
 
     [Header("Health Phases")]
     [Range(0, 1)] public float phase2HealthThreshold = 0.66f;
@@ -35,11 +35,13 @@ public class BossHealth : MonoBehaviour
     [Header("References")]
     public Animator anim;
     private BossFSM bossFSM;
+    private WizardFSM wizardFSM;
 
     [Header("Damage Immunity")]
     public float damageImmunityDuration = 0.2f;
     private bool isDamageImmune = false;
     private bool isDead = false;
+    private bool deathAnimationStarted = false;
 
     [Header("Phase Change Effects")]
     public GameObject phase2Effect;
@@ -48,12 +50,12 @@ public class BossHealth : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-       originalColor = Color.white;
+        originalColor = Color.white;
         spriteRenderer.color = originalColor;
         bossFSM = GetComponent<BossFSM>();
+        wizardFSM = GetComponent<WizardFSM>();
         currentHealth = maxHealth;
 
-        // Sembunyikan slider di awal
         if (bossSlider != null)
         {
             bossSlider.maxValue = maxHealth;
@@ -93,7 +95,11 @@ public class BossHealth : MonoBehaviour
                 bossFSM.OnTakeDamage();
             }
 
-            // Tampilkan slider saat pertama kali kena damage
+            if (wizardFSM != null)
+            {
+                wizardFSM.OnTakeDamage();
+            }
+
             if (bossSlider != null)
             {
                 if (!bossSlider.gameObject.activeSelf)
@@ -116,7 +122,82 @@ public class BossHealth : MonoBehaviour
 
         if (currentHealth <= 0 && !isDead)
         {
-            Die();
+            StartDeathSequence();
+        }
+    }
+
+    private void StartDeathSequence()
+    {
+        if (deathAnimationStarted) return;
+        
+        isDead = true;
+        deathAnimationStarted = true;
+        Debug.Log("Boss " + gameObject.name + " death sequence started!");
+
+        // Disable movement dan pathfinding
+        if (bossFSM != null)
+        {
+            bossFSM.OnDeath(); // Ini akan trigger death state dan animation
+        }
+
+        if (wizardFSM != null)
+        {
+            wizardFSM.OnDeath();
+        }
+
+        // Sembunyikan slider saat boss mulai mati
+        if (bossSlider != null)
+        {
+            bossSlider.gameObject.SetActive(false);
+        }
+
+        // Spawn death effect
+        if (deathEffect != null)
+        {
+            Instantiate(deathEffect, transform.position, Quaternion.identity);
+        }
+
+        // Trigger exp reward
+        OnBossDefeated?.Invoke(expReward);
+
+        // Drop loot immediately saat death animation dimulai
+        DropLoot();
+    }
+
+    // Method ini dipanggil dari Animation Event saat death animation selesai
+    public void OnDeathAnimationComplete()
+    {
+        Debug.Log("Death animation completed - destroying boss");
+        
+        // Destroy gameobject setelah animation selesai
+        if (transform.parent != null)
+        {
+            Destroy(transform.parent.gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    // Alternative method jika Anda ingin delay sebelum destroy
+    public void OnDeathAnimationCompleteWithDelay()
+    {
+        Debug.Log("Death animation completed - destroying boss with delay");
+        StartCoroutine(DestroyAfterDelay(0.5f));
+    }
+
+    private IEnumerator DestroyAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        
+        if (transform.parent != null)
+        {
+            Destroy(transform.parent.gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -171,55 +252,6 @@ public class BossHealth : MonoBehaviour
         }
     }
 
-    public void Die()
-    {
-        if (isDead) return;
-
-        isDead = true;
-        Debug.Log("Boss " + gameObject.name + " has been defeated!");
-
-        if (bossFSM != null)
-        {
-            bossFSM.OnDeath();
-        }
-
-        if (anim != null)
-        {
-            anim.SetTrigger("isDeath");
-        }
-
-        if (deathEffect != null)
-        {
-            Instantiate(deathEffect, transform.position, Quaternion.identity);
-        }
-
-        OnBossDefeated?.Invoke(expReward);
-
-        // Sembunyikan slider saat boss mati
-        if (bossSlider != null)
-        {
-            bossSlider.gameObject.SetActive(false);
-        }
-
-        StartCoroutine(DropLootAfterDelay(2f));
-    }
-
-    private IEnumerator DropLootAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        DropLoot();
-
-        yield return new WaitForSeconds(1f);
-        if (transform.parent != null)
-        {
-            Destroy(transform.parent.gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     private void DropLoot()
     {
         Vector3 dropPosition = transform.position;
@@ -271,7 +303,6 @@ public class BossHealth : MonoBehaviour
     {
         if (spriteRenderer != null)
         {
-            
             spriteRenderer.color = Color.red;
             yield return new WaitForSeconds(0.1f);
             spriteRenderer.color = originalColor;

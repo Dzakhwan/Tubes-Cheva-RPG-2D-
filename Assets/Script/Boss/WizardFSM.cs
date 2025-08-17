@@ -14,14 +14,14 @@ public class WizardFSM : MonoBehaviour
     public Animator anim;
     
     [Header("Detection & Movement")]
-    public float playerDetectionRange = 8f; // Boss has larger detection range
+    public float playerDetectionRange = 8f;
     public LayerMask playerLayer;
-    public float speed = 1.5f; // Boss moves slower but hits harder
+    public float speed = 1.5f;
     
     [Header("Attack Settings")]
-    public float attackRange = 3f; // Boss has longer attack range
+    public float attackRange = 3f;
     private float attackTimer = 0;
-    public float attackCooldown = 3f; // Longer cooldown between attacks
+    public float attackCooldown = 3f;
     public bool isKnockedBack = false;
     
     [Header("Attack Duration")]
@@ -45,41 +45,37 @@ public class WizardFSM : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
         }
 
-        // Get BossHealth component
         bossHealth = GetComponent<BossHealth>();
         if (bossHealth == null)
         {
             Debug.LogWarning("BossHealth component not found on " + gameObject.name);
         }
 
-        // Get AIPath component
         aiPath = GetComponent<AIPath>();
         if (aiPath != null)
         {
-            aiPath.enabled = false; // Start disabled
+            aiPath.enabled = false;
         }
 
-        // Auto-find player if not assigned
         if (player == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
             if (playerObj != null)
             {
                 player = playerObj.transform;
-                Debug.Log("Player found and assigned automatically for Boss");
+                Debug.Log("Player found and assigned automatically for Wizard");
             }
         }
 
-        // Initialize pathfinding after a short delay to ensure graph is ready
         StartCoroutine(InitializePathfinding());
     }
 
     void Update()
     {
-        // Don't do anything if dead
-        if (isDead) return;
+        // Jangan lakukan apapun jika sudah mati
+        if (isDead || currentState == State.Death) return;
         
-        if (currentState != State.Knockback && currentState != State.Death)
+        if (currentState != State.Knockback)
         {
             CheckForPlayer();
             if (attackTimer > 0)
@@ -87,7 +83,6 @@ public class WizardFSM : MonoBehaviour
                 attackTimer -= Time.deltaTime;
             }
             
-            // Execute behavior based on current state
             switch (currentState)
             {
                 case State.Idle:
@@ -98,7 +93,6 @@ public class WizardFSM : MonoBehaviour
                     break;
                 case State.Attack:
                     rb.linearVelocity = Vector2.zero;
-                    // Check if player moved out of range during attack
                     if (Vector2.Distance(transform.position, player.position) > attackRange * 1.5f)
                     {
                         ChangeState(State.Chase);
@@ -107,7 +101,6 @@ public class WizardFSM : MonoBehaviour
             }
         }
         
-        // Keep boss in position if it has a parent
         if (transform.parent != null)
         {
             transform.localPosition = Vector3.zero;
@@ -119,28 +112,25 @@ public class WizardFSM : MonoBehaviour
     {
         if (player == null || rb == null) return;
 
-        // Use pathfinding if available and initialized
         if (usePathfinding && pathfindingInitialized && aiPath != null && aiPath.enabled)
         {
-            // Let AIPath handle the movement
             return;
         }
         else
         {
-            // Fallback to direct movement
             Vector2 direction = (player.position - transform.position).normalized;
             rb.linearVelocity = direction * speed;
         }
 
-        // Face player direction
         FacePlayerDirection();
     }
 
     private void CheckForPlayer()
     {
-        if (detectionPoint == null)
+        if (detectionPoint == null || isDead)
         {
-            Debug.LogError("DetectionPoint is not assigned!");
+            if (detectionPoint == null)
+                Debug.LogError("DetectionPoint is not assigned!");
             return;
         }
 
@@ -150,7 +140,6 @@ public class WizardFSM : MonoBehaviour
             player = hits[0].transform;
             float distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
             
-            // Enable pathfinding if initialized and available
             if (usePathfinding && pathfindingInitialized)
             {
                 if (aiDestinationSetter != null)
@@ -164,26 +153,22 @@ public class WizardFSM : MonoBehaviour
                 }
             }
 
-            Debug.Log("Boss detected player! Distance: " + distanceToPlayer + ", Current State: " + currentState);
+            Debug.Log("Wizard detected player! Distance: " + distanceToPlayer + ", Current State: " + currentState);
 
-            // Don't change state if currently attacking and still in cooldown
             if (currentState == State.Attack && attackTimer > 0)
             {
                 return;
             }
 
-            // Check attack range
             if (distanceToPlayer <= attackRange && attackTimer <= 0)
             {
                 attackTimer = attackCooldown;
                 ChangeState(State.Attack);
             }
-            // If outside attack range, chase
             else if (distanceToPlayer > attackRange && currentState != State.Attack)
             {
                 ChangeState(State.Chase);
             }
-            // If in attack range but still cooling down and NOT currently attacking
             else if (distanceToPlayer <= attackRange && attackTimer > 0 && currentState != State.Attack)
             {
                 rb.linearVelocity = Vector2.zero;
@@ -191,7 +176,6 @@ public class WizardFSM : MonoBehaviour
         }
         else
         {
-            // Disable pathfinding when no player detected
             if (usePathfinding && pathfindingInitialized)
             {
                 if (aiDestinationSetter != null)
@@ -204,7 +188,6 @@ public class WizardFSM : MonoBehaviour
                 }
             }
             
-            // Return to idle if no player detected
             if (currentState == State.Chase)
             {
                 ChangeState(State.Idle);
@@ -214,24 +197,20 @@ public class WizardFSM : MonoBehaviour
 
     public void ChangeState(State newState)
     {
-        if (isDead) return;
+        // Jangan bisa keluar dari death state
+        if (isDead && currentState == State.Death) return;
         
-        Debug.Log("Boss changing state from " + currentState + " to " + newState);
+        Debug.Log("Wizard changing state from " + currentState + " to " + newState);
 
-        // Exit current state
         ExitCurrentState();
-
-        // Change to new state
         currentState = newState;
-
-        // Enter new state
         EnterNewState();
     }
 
     private void ExitCurrentState()
     {
         if (anim == null) return;
-        
+
         switch (currentState)
         {
             case State.Idle:
@@ -262,12 +241,21 @@ public class WizardFSM : MonoBehaviour
             case State.Attack:
                 anim.SetBool("isAttack", true);
                 StartCoroutine(ResetAttackAfterDuration(attackDuration));
-                Debug.Log("Boss performing Attack");
+                Debug.Log("Wizard performing Attack");
                 break;
             case State.Death:
+                // Set death animation trigger
                 anim.SetTrigger("isDeath");
                 isDead = true;
                 rb.linearVelocity = Vector2.zero;
+                
+                // Disable collider agar tidak bisa diserang lagi
+                Collider2D col = GetComponent<Collider2D>();
+                if (col != null)
+                {
+                    col.enabled = false;
+                }
+                
                 // Disable pathfinding
                 if (pathfindingInitialized)
                 {
@@ -276,6 +264,8 @@ public class WizardFSM : MonoBehaviour
                     if (aiPath != null)
                         aiPath.enabled = false;
                 }
+                
+                Debug.Log("Wizard entered death state - animation should play");
                 break;
         }
     }
@@ -295,18 +285,17 @@ public class WizardFSM : MonoBehaviour
         
         if (currentState == State.Attack)
         {
-            // Check if player is still in range
             if (player != null)
             {
                 float distanceToPlayer = Vector2.Distance(transform.position, player.position);
                 if (distanceToPlayer <= attackRange)
                 {
-                    rb.linearVelocity = Vector2.zero; // Wait for next attack
-                    ChangeState(State.Idle); // Return to idle, will detect player again and potentially attack
+                    rb.linearVelocity = Vector2.zero;
+                    ChangeState(State.Idle);
                 }
                 else
                 {
-                    ChangeState(State.Chase); // Chase if player moved away
+                    ChangeState(State.Chase);
                 }
             }
             else
@@ -316,18 +305,15 @@ public class WizardFSM : MonoBehaviour
         }
     }
 
-    // Called from BossHealth when taking damage
     public void OnTakeDamage()
     {
         if (!isDead && currentState != State.Death && anim != null)
         {
-            // Trigger hit animation without changing state
             anim.SetTrigger("isTakeHit");
-            Debug.Log("Boss take hit animation triggered");
+            Debug.Log("Wizard take hit animation triggered");
         }
     }
 
-    // Called from BossHealth when dying
     public void OnDeath()
     {
         ChangeState(State.Death);
@@ -335,7 +321,7 @@ public class WizardFSM : MonoBehaviour
 
     public void BossKnockback(Transform attacker, float force, float duration)
     {
-        if (isDead) return;
+        if (isDead || currentState == State.Death) return;
         
         isKnockedBack = true;
         Vector2 direction = (transform.position - attacker.position).normalized;
@@ -352,20 +338,16 @@ public class WizardFSM : MonoBehaviour
 
     private IEnumerator InitializePathfinding()
     {
-        // Wait for pathfinding graph to be ready
         yield return new WaitForSeconds(0.5f);
         
-        // Check if pathfinding graph exists and has nodes
         if (AstarPath.active != null && AstarPath.active.data != null && AstarPath.active.data.graphs != null)
         {
-            // Try to find the closest node to current position
             var node = AstarPath.active.GetNearest(transform.position);
             if (node.node != null)
             {
                 pathfindingInitialized = true;
-                Debug.Log("Boss pathfinding initialized successfully");
+                Debug.Log("Wizard pathfinding initialized successfully");
                 
-                // Enable pathfinding components if they exist
                 if (aiPath != null)
                 {
                     aiPath.maxSpeed = speed;
@@ -373,18 +355,17 @@ public class WizardFSM : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("Boss: No valid pathfinding node found near position " + transform.position + ". Using direct movement.");
+                Debug.LogWarning("Wizard: No valid pathfinding node found near position " + transform.position + ". Using direct movement.");
                 usePathfinding = false;
             }
         }
         else
         {
-            Debug.LogWarning("Boss: Pathfinding graph not ready. Using direct movement.");
+            Debug.LogWarning("Wizard: Pathfinding graph not ready. Using direct movement.");
             usePathfinding = false;
         }
     }
 
-    // Method to manually snap boss to nearest valid pathfinding node
     public void SnapToNearestNode()
     {
         if (AstarPath.active != null)
@@ -393,12 +374,11 @@ public class WizardFSM : MonoBehaviour
             if (nearest.node != null)
             {
                 transform.position = (Vector3)nearest.position;
-                Debug.Log("Boss snapped to nearest pathfinding node");
+                Debug.Log("Wizard snapped to nearest pathfinding node");
             }
         }
     }
 
-    // For debugging
     void OnDrawGizmosSelected()
     {
         if (detectionPoint != null)
