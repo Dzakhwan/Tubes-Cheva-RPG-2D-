@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class SoundEffectManager : MonoBehaviour
 {
-    private static SoundEffectManager Instance;
+    public static SoundEffectManager Instance { get; private set; }
 
     private static AudioSource audioSource;
     private static SoundEffectLibrary soundEffectLibrary;
