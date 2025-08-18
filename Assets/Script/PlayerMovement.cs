@@ -6,6 +6,8 @@ public class PlayerMovement : MonoBehaviour
 {
 
     public Rigidbody2D rb;
+    private Vector2 CheckpointPos;
+    private PlayerHealth playerHealth;
     public int facingDirection = 1;
     bool isRunning = false;
     private bool isKnockedBack = false;
@@ -19,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        CheckpointPos = transform.position;
+        playerHealth = GetComponent<PlayerHealth>();
         anim = GetComponent<Animator>();
     }
 

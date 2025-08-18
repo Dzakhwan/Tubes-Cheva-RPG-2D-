@@ -7,7 +7,7 @@ public class StatsUIController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("ToggleStats")) // tekan tombol
+        if (Input.GetKeyDown(KeyCode.Tab)) // tekan tombol
         {
             bool isActive = statsUI.activeSelf;
             statsUI.SetActive(!isActive); // toggle tampil/hilang

@@ -168,6 +168,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5444318492455956884, guid: d309ae7af6c83684e8b53979704808bd, type: 3}
+      propertyPath: aiPath
+      value: 
+      objectReference: {fileID: 1112216230965797259}
+    - target: {fileID: 5444318492455956884, guid: d309ae7af6c83684e8b53979704808bd, type: 3}
       propertyPath: aiDestinationSetter
       value: 
       objectReference: {fileID: 1309688090072296764}
