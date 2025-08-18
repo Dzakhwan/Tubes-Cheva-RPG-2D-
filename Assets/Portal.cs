@@ -5,9 +5,9 @@ using TMPro;
 public class Portal : MonoBehaviour
 {
     public bool loadPrologueScene = true; // kalau true -> load scene
-    public string prologueSceneName = "Prologue"; // nama scene prologue
-    public TextMeshProUGUI congratsText; // teks selamat
-    public float textDuration = 3f; // durasi teks tampil
+   
+   
+    public float duration = 5f;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -16,23 +16,20 @@ public class Portal : MonoBehaviour
             if (loadPrologueScene)
             {
                 // Pindah ke scene Prologue
-                SceneManager.LoadScene(prologueSceneName);
+                SceneManager.LoadScene("Prologue");
+             StartCoroutine(BackToMenu(duration));
             }
-            else
-            {
-                // Tampilkan teks selamat
-                StartCoroutine(ShowCongratsText());
-            }
+
         }
     }
 
-    private System.Collections.IEnumerator ShowCongratsText()
+    private System.Collections.IEnumerator BackToMenu(float duration)
     {
-        congratsText.gameObject.SetActive(true);
-        congratsText.text = "🎉 Selamat! Kamu berhasil mengalahkan Boss! 🎉";
 
-        yield return new WaitForSecondsRealtime(textDuration);
+        yield return new WaitForSecondsRealtime(duration);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
 
-        congratsText.gameObject.SetActive(false);
+        
     }
 }
